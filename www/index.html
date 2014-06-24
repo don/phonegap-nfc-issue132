@@ -18,6 +18,10 @@ function writeTag(nfcEvent) {
   var mimeType = document.forms[0].elements["mimeType"].value,
     payload = document.forms[0].elements["payload"].value,
     record = [ndef.mimeMediaRecord(mimeType, nfc.stringToBytes(payload))];
+    
+  console.log("mimeType is " + mimeType);
+  console.log("payload is " + payload);
+  console.log("record is " + record);
 
   nfc.write(
         record,
@@ -39,9 +43,12 @@ function P2P(nfcEvent) {
     cat = document.forms[0].elements["payload"].value,
     record = [ndef.mimeMediaRecord(mimeType, nfc.stringToBytes(cat))],
     tag = nfcEvent.tag,
+    
+    // NOTE this will always be undefined when you use nfc.addTagDiscoveredListener
+    // You need to use nfc.addNdefListener to get an NdefMessage
       avavav = tag.ndefMessage;
 
-       alert(avavav); <<<<<<<<<<<<<<<<<<<< (sub issue Read value is show "undefined")
+       alert(avavav); // <<<<<<<<<<<<<<<<<<<< (sub issue Read value is show "undefined")
        
   nfc.share(
         record,
@@ -66,8 +73,9 @@ var ready = function () {
     alert('pls trun on NFC');
   }
 
+  // you can only call addTagDiscoveredListener 1x
   nfc.addTagDiscoveredListener(writeTag, win, fail);
-  nfc.addTagDiscoveredListener(P2P, win, fail);
+//  nfc.addTagDiscoveredListener(P2P, win, fail);
 
   document.addEventListener("menubutton", showSampleData, false);
 

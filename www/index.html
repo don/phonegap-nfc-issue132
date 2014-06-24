@@ -1,44 +1,181 @@
-<!DOCTYPE html>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
+<!DOCTYPE HTML>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <meta name="msapplication-tap-highlight" content="no" />
-        <title>Hello World</title>
-    </head>
-    <body>
-        <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
-            </div>
-        </div>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript">
-            app.initialize();
-        </script>
-    </body>
+  <head>
+    <meta name="viewport" content="width=320; user-scalable=no" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>NFC Writer Demo</title>
+	  <link rel="stylesheet" href="master.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	  <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+	  <script type="text/javascript" charset="utf-8" src="phonegap-nfc.js"></script>
+          <script type="text/javascript" charset="utf-8" src="phonegap-toast.js"></script>
+
+	  <script type="text/javascript" charset="utf-8">
+
+          /*global NdefPlugin, Ndef */
+
+var toast = cordova.require('toast');
+
+function writeTag(nfcEvent) {
+  // ignore what's on the tag for now, just overwrite
+
+  var mimeType = document.forms[0].elements["mimeType"].value,
+    payload = document.forms[0].elements["payload"].value,
+    record = [ndef.mimeMediaRecord(mimeType, nfc.stringToBytes(payload))];
+
+  nfc.write(
+        record,
+        function () {
+            toast.showShort("Wrote data to tag.");
+            navigator.notification.vibrate(1000);
+            navigator.notification.beep(1);
+        },
+        function (reason) {
+            navigator.notification.alert(reason, function() {}, "Write Error");
+        }
+  );
+}
+
+
+
+
+
+
+
+
+
+
+function P2P(nfcEvent) {
+  // ignore what's on the tag for now, just overwrite
+
+  var mimeType = document.forms[0].elements["mimeType"].value,
+    cat = document.forms[0].elements["payload"].value,
+    record = [ndef.mimeMediaRecord(mimeType, nfc.stringToBytes(cat))],
+    tag = nfcEvent.tag,
+      avavav = tag.ndefMessage;
+
+       alert(avavav); <<<<<<<<<<<<<<<<<<<< (sub issue Read value is show "undefined")
+
+
+
+  nfc.share(
+        record,
+        function () {
+            toast.showShort("Share data to Other Drive.");
+            navigator.notification.vibrate(1000);
+            navigator.notification.beep(1);
+        },
+        function (reason) {
+            navigator.notification.alert(reason, function() {}, "Share Error");
+        }
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var ready = function () {
+
+  function win() {
+    console.log("Listening for NDEF tags");
+  }
+
+  function fail() {
+    alert('pls trun on NFC');
+  }
+
+  nfc.addTagDiscoveredListener(writeTag, win, fail);
+  nfc.addTagDiscoveredListener(P2P, win, fail);
+
+  document.addEventListener("menubutton", showSampleData, false);
+
+};
+
+document.addEventListener('deviceready', ready, false);
+
+var data = [
+    {
+        mimeType: 'text/plain',
+        payload: 'Hello PhoneGap'
+    },
+    {
+        mimeType: 'text/pg',
+        payload: 'Hello PhoneGap'
+    },
+    {
+        mimeType: 'text/x-vCard',
+        payload: 'BEGIN:VCARD\n' +
+            'VERSION:2.1\n' +
+            'N:Coleman;Don;;;\n' +
+            'FN:Don Coleman\n' +
+            'ORG:Chariot Solutions;\n' +
+            'URL:http://chariotsolutions.com\n' +
+            'TEL;WORK:215-358-1780\n' +
+            'EMAIL;WORK:dcoleman@chariotsolutions.com\n' +
+            'END:VCARD'
+    },
+    {
+        mimeType: 'text/x-vCard',
+        payload: 'BEGIN:VCARD\n' +
+            'VERSION:2.1\n' +
+            'N:Griffin;Kevin;;;\n' +
+            'FN:Kevin Griffin\n' +
+            'ORG:Chariot Solutions;\n' +
+            'URL:http://chariotsolutions.com\n' +
+            'TEL;WORK:215-358-1780\n' +
+            'EMAIL;WORK:kgriffin@chariotsolutions.com\n' +
+            'END:VCARD'
+    },
+    {
+        mimeType: 'game/rockpaperscissors',
+        payload: 'Rock'
+    },
+    {
+        mimeType: '',
+        payload: ''
+    }
+];
+
+var index = 0;
+function showSampleData() {
+    var mimeTypeField = document.forms[0].elements["mimeType"],
+      payloadField = document.forms[0].elements["payload"],
+      record = data[index];
+
+    index++;
+    if (index >= data.length) {
+        index = 0;
+    }
+
+    mimeTypeField.value = record.mimeType;
+    payloadField.value = record.payload;
+}
+
+
+
+	  </script>
+  </head>
+  <body>
+    <h1>PhoneGap NFC Writer and share</h1>
+    <form>
+      Mime Type:<br/>
+      <input type="text" name="mimeType" value="text/pg" size="30" /><br/>
+      Payload:<br/>      
+      <textarea name="payload" rows="10" cols="30">hahahahahaha </textarea>
+    </form>
+    <p>
+        Tap an NFC tag to write data.
+    </p>
+
+
+  </body>
 </html>

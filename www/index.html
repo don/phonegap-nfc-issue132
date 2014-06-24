@@ -4,12 +4,11 @@
     <meta name="viewport" content="width=320; user-scalable=no" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>NFC Writer Demo</title>
-	  <link rel="stylesheet" href="master.css" type="text/css" media="screen" title="no title" charset="utf-8">
-	  <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-	  <script type="text/javascript" charset="utf-8" src="phonegap-nfc.js"></script>
-          <script type="text/javascript" charset="utf-8" src="phonegap-toast.js"></script>
-
-	  <script type="text/javascript" charset="utf-8">
+      <link rel="stylesheet" href="master.css" type="text/css" media="screen" title="no title" charset="utf-8">
+      <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+      <script type="text/javascript" charset="utf-8" src="phonegap-nfc.js"></script>
+      <script type="text/javascript" charset="utf-8" src="phonegap-toast.js"></script>
+      <script type="text/javascript" charset="utf-8">
 
           /*global NdefPlugin, Ndef */
 
@@ -35,15 +34,6 @@ function writeTag(nfcEvent) {
   );
 }
 
-
-
-
-
-
-
-
-
-
 function P2P(nfcEvent) {
   // ignore what's on the tag for now, just overwrite
 
@@ -54,9 +44,7 @@ function P2P(nfcEvent) {
       avavav = tag.ndefMessage;
 
        alert(avavav); <<<<<<<<<<<<<<<<<<<< (sub issue Read value is show "undefined")
-
-
-
+       
   nfc.share(
         record,
         function () {
@@ -69,19 +57,6 @@ function P2P(nfcEvent) {
         }
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 var ready = function () {
 
@@ -160,9 +135,7 @@ function showSampleData() {
     payloadField.value = record.payload;
 }
 
-
-
-	  </script>
+  </script>
   </head>
   <body>
     <h1>PhoneGap NFC Writer and share</h1>
@@ -175,7 +148,5 @@ function showSampleData() {
     <p>
         Tap an NFC tag to write data.
     </p>
-
-
   </body>
 </html>
